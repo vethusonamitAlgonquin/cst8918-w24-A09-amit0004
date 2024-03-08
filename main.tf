@@ -21,7 +21,7 @@ provider "azurerm" {
 
 
 variable "labelPrefix" {
-  type                = string
+  type        = string
   description = "Your college username. This will form the beginning of various resource names."
 }
 
@@ -39,7 +39,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_storage_account" "storageacconut" {
-  name                                          = "${var.labelPrefix}storageaccount"
+  name                     = "${var.labelPrefix}storageaccount"
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
