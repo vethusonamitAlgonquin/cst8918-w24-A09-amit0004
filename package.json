@@ -1,7 +1,6 @@
 {
   "name": "lab09",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,5 +11,14 @@
   "license": "ISC",
   "devDependencies": {
     "husky": "^8.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vethusonamitAlgonquin/cst8918-w24-A09-amit0004.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vethusonamitAlgonquin/cst8918-w24-A09-amit0004/issues"
+  },
+  "homepage": "https://github.com/vethusonamitAlgonquin/cst8918-w24-A09-amit0004#readme",
+  "description": ""
 }
