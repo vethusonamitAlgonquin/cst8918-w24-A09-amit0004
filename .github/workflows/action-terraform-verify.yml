@@ -1,4 +1,4 @@
-name: Validate terraform fmt
+name: Validate terraform
 on:
   pull_request:
     branches:
@@ -53,19 +53,40 @@ jobs:
     
   terraform-validate:
     runs-on: ubuntu-latest
-    name: Validate Terraform module
+    name: terraform validate check
+    outputs:
+      CHECK_STATUS: "${{ env.CHECK_STATUS }}"
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: terraform validate
-        uses: dflook/terraform-validate@v1
-        id: validate
+      - uses: actions/checkout@v3
         with:
-          path: my-terraform-config
-
-      - name: Validate failed
-        if: ${{ failure() && steps.validate.outputs.failure-reason == 'validate-failed' }}
-        run: echo "terraform validate failed"
+        fetch-depth: 2
+      - name: Fetch changed files
+        id: pr_files
+        uses: jitterbit/get-changed-files@v1
+        with:
+          format: "space-delimited"
+      - name: Configure terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.2.4
+      - name: Validate Terraform configurations (added_modified)
+        run: |
+          set +e
+          echo "CHECK_STATUS=0" >> $GITHUB_ENV
+          
+          for changed_file in ${{ steps.pr_files.outputs.added_modified }}; do
+            if [[ $changed_file == *.tf ]]; then
+              terraform validate $changed_file
+              VALIDATE_STATUS=$(echo $?) 
+            
+              if [[ $VALIDATE_STATUS -ne 0 ]]; then
+                echo "❌ Terraform validation failed - ${changed_file}" >> $GITHUB_STEP_SUMMARY
+                echo "CHECK_STATUS=1" >> $GITHUB_ENV
+              fi
+            fi
+          done
+      - name: Process check
+        if: always()
+        run: exit $CHECK_STATUS
 
 
