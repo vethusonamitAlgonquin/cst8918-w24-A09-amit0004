@@ -1,4 +1,4 @@
-name: Validate terraform
+name: Validate terraform fmt
 on:
   pull_request:
     branches:
@@ -59,7 +59,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-        fetch-depth: 2
+          fetch-depth: 2
       - name: Fetch changed files
         id: pr_files
         uses: jitterbit/get-changed-files@v1
