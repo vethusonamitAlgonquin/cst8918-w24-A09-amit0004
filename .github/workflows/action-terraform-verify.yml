@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  validate:
+  terraform-fmt:
     runs-on: ubuntu-latest
     name: terraform fmt check
     outputs:
@@ -50,3 +50,22 @@ jobs:
       - name: Process check
         if: always()
         run: exit $CHECK_STATUS
+    
+  terraform-validate:
+    runs-on: ubuntu-latest
+    name: Validate Terraform module
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: terraform validate
+        uses: dflook/terraform-validate@v1
+        id: validate
+        with:
+          path: my-terraform-config
+
+      - name: Validate failed
+        if: ${{ failure() && steps.validate.outputs.failure-reason == 'validate-failed' }}
+        run: echo "terraform validate failed"
+
+
