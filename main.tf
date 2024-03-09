@@ -28,7 +28,7 @@ variable "labelPrefix" {
 variable "region" {
   default = "westus3"
   type    = string
-
+}
 
 
 
